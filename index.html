@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button onclick="getData()">获取数据</button>
+</body>
+
+<script>
+  function getData() {
+    const query = `
+        query GetSuperHero($heroName: String, $thing: String){
+            getSuperHero(heroName: $heroName){
+                name
+                age
+                doSomething(thing: $thing)
+            }
+        }
+    `
+    // 如果不需要其他参数 至少要传一个参数 否则会报错
+    // const query = `
+    //     query GetSuperHero($heroName: String){
+    //         getSuperHero(heroName: $heroName){
+    //              name
+    //         }
+    //     }
+    // `
+    const variables = {
+      heroName: '钢铁侠',
+      thing: 'watching TV'
+    }
+
+    fetch('/graphql', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          query,
+          variables
+        })
+      })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json)
+      })
+  }
+</script>
+
+</html>
